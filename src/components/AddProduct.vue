@@ -1,9 +1,8 @@
 <template>
   <div class="submit-form">
     <div v-if="!submitted">
-
-      <h3> -: Product Details :- </h3>
-      <br>
+      <h3>-: Product Details :-</h3>
+      <br />
 
       <div class="form-group">
         <label for="name">Name:</label>
@@ -12,11 +11,11 @@
           class="form-control"
           id="name"
           required
-          v-model="tutorial.name"
+          v-model="product.name"
           name="name"
         />
       </div>
-      <br>
+      <br />
 
       <div class="form-group">
         <label for="price">Price:</label>
@@ -25,11 +24,11 @@
           class="form-control"
           id="price"
           required
-          v-model="tutorial.price"
+          v-model="product.price"
           name="price"
         />
       </div>
-      <br>
+      <br />
 
       <div class="form-group">
         <label for="quantity">Quantity:</label>
@@ -37,63 +36,63 @@
           class="form-control"
           id="quantity"
           required
-          v-model="tutorial.quantity"
+          v-model="product.quantity"
           name="quantity"
         />
       </div>
-      <br>
+      <br />
 
-    <br>
-      <button @click="saveTutorial" class="btn btn-primary">Submit</button>
+      <br />
+      <button @click="saveProduct" class="btn btn-primary">Submit</button>
     </div>
 
     <div v-else>
-      <br><br><br>
+      <br /><br /><br />
       <h5>Product added successfully :)</h5>
     </div>
   </div>
 </template>
 
 <script>
-import TutorialDataService from "../services/TutorialDataService";
+import ProductDataService from "../services/ProductDataService";
 
 export default {
-  name: "add-tutorial",
+  name: "add-product",
   data() {
     return {
-      tutorial: {
+      product: {
         id: null,
         name: "",
         price: "",
-        quantity: ""
+        quantity: "",
       },
-      submitted: false
+      submitted: false,
     };
   },
   methods: {
-    saveTutorial() {
+    saveProduct() {
       var data = {
-        name: this.tutorial.name,
-        price: this.tutorial.price,
-        quantity: this.tutorial.quantity
+        name: this.product.name,
+        price: this.product.price,
+        quantity: this.product.quantity,
       };
 
-      TutorialDataService.create(data)
-        .then(response => {
-          this.tutorial.id = response.data.id;
+      ProductDataService.create(data)
+        .then((response) => {
+          this.product.id = response.data.id;
           console.log(response.data);
           this.submitted = true;
         })
-        .catch(e => {
+        .catch((e) => {
           console.log(e);
         });
     },
-    
-    newTutorial() {
+
+    newProduct() {
       this.submitted = false;
-      this.tutorial = {};
-    }
-  }
+      this.product = {};
+    },
+  },
 };
 </script>
 
