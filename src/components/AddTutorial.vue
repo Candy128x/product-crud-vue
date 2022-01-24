@@ -1,35 +1,55 @@
 <template>
   <div class="submit-form">
     <div v-if="!submitted">
+
+      <h3> -: Product Details :- </h3>
+      <br>
+
       <div class="form-group">
-        <label for="title">Title</label>
+        <label for="name">Name:</label>
         <input
           type="text"
           class="form-control"
-          id="title"
+          id="name"
           required
-          v-model="tutorial.title"
-          name="title"
+          v-model="tutorial.name"
+          name="name"
         />
       </div>
+      <br>
 
       <div class="form-group">
-        <label for="description">Description</label>
+        <label for="price">Price:</label>
         <input
+          type="number"
           class="form-control"
-          id="description"
+          id="price"
           required
-          v-model="tutorial.description"
-          name="description"
+          v-model="tutorial.price"
+          name="price"
         />
       </div>
+      <br>
 
-      <button @click="saveTutorial" class="btn btn-success">Submit</button>
+      <div class="form-group">
+        <label for="quantity">Quantity:</label>
+        <input
+          class="form-control"
+          id="quantity"
+          required
+          v-model="tutorial.quantity"
+          name="quantity"
+        />
+      </div>
+      <br>
+
+    <br>
+      <button @click="saveTutorial" class="btn btn-primary">Submit</button>
     </div>
 
     <div v-else>
-      <h4>You submitted successfully!</h4>
-      <button class="btn btn-success" @click="newTutorial">Add</button>
+      <br><br><br>
+      <h5>Product added successfully :)</h5>
     </div>
   </div>
 </template>
@@ -43,9 +63,9 @@ export default {
     return {
       tutorial: {
         id: null,
-        title: "",
-        description: "",
-        published: false
+        name: "",
+        price: "",
+        quantity: ""
       },
       submitted: false
     };
@@ -53,8 +73,9 @@ export default {
   methods: {
     saveTutorial() {
       var data = {
-        title: this.tutorial.title,
-        description: this.tutorial.description
+        name: this.tutorial.name,
+        price: this.tutorial.price,
+        quantity: this.tutorial.quantity
       };
 
       TutorialDataService.create(data)

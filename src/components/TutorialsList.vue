@@ -2,7 +2,7 @@
   <div class="list row">
     <div class="col-md-8">
       <div class="input-group mb-3">
-        <input type="text" class="form-control" placeholder="Search by title"
+        <input type="text" class="form-control" placeholder="Search by name"
           v-model="title"/>
         <div class="input-group-append">
           <button class="btn btn-outline-secondary" type="button"
@@ -10,11 +10,15 @@
           >
             Search
           </button>
+
+      <a href="/add" class="btn btn-primary" style="margin-left: 32px;" role="button"> + Add</a>
+
         </div>
       </div>
     </div>
     <div class="col-md-6">
-      <h4>Tutorials List</h4>
+    <br>
+      <h4>Products List</h4>
       <ul class="list-group">
         <li class="list-group-item"
           :class="{ active: index == currentIndex }"
@@ -22,33 +26,46 @@
           :key="index"
           @click="setActiveTutorial(tutorial, index)"
         >
-          {{ tutorial.title }}
+          {{ tutorial.name }}
         </li>
       </ul>
 
-      <button class="m-3 btn btn-sm btn-danger" @click="removeAllTutorials">
-        Remove All
-      </button>
+    
     </div>
     <div class="col-md-6">
       <div v-if="currentTutorial">
-        <h4>Tutorial</h4>
+      <br><br>
+        <h4>Product Details:</h4>
         <div>
-          <label><strong>Title:</strong></label> {{ currentTutorial.title }}
+          <label><strong>Title:</strong></label> {{ currentTutorial.name }}
         </div>
         <div>
-          <label><strong>Description:</strong></label> {{ currentTutorial.description }}
+          <label><strong>Price:</strong></label> {{ currentTutorial.price }}
         </div>
         <div>
-          <label><strong>Status:</strong></label> {{ currentTutorial.published ? "Published" : "Pending" }}
+          <label><strong>Quantity:</strong></label> {{ currentTutorial.quantity }}
         </div>
 
-        <router-link :to="'/tutorials/' + currentTutorial.id" class="badge badge-warning">Edit</router-link>
+        <br>
+        <router-link :to="'/tutorials/' + currentTutorial.id" class="btn btn-info">Edit</router-link>
+
+            <button class="btn btn-danger" style="margin: 10px;"
+      @click="deleteTutorial"
+    >
+      Delete
+    </button>
+
       </div>
       <div v-else>
         <br />
-        <p>Please click on a Tutorial...</p>
+        <p>Click on product's to view details..</p>
       </div>
+
+      <div v-if="isProductDeleted">
+        <br />
+        <p>Product deleted successfully.</p>
+      </div>
+
     </div>
   </div>
 </template>
@@ -62,15 +79,16 @@ export default {
     return {
       tutorials: [],
       currentTutorial: null,
+      isProductDeleted: null,
       currentIndex: -1,
-      title: ""
+      name: ""
     };
   },
   methods: {
     retrieveTutorials() {
       TutorialDataService.getAll()
         .then(response => {
-          this.tutorials = response.data;
+          this.tutorials = response.data.results;
           console.log(response.data);
         })
         .catch(e => {
@@ -82,6 +100,7 @@ export default {
       this.retrieveTutorials();
       this.currentTutorial = null;
       this.currentIndex = -1;
+      this.isProductDeleted = null;
     },
 
     setActiveTutorial(tutorial, index) {
@@ -89,11 +108,15 @@ export default {
       this.currentIndex = index;
     },
 
-    removeAllTutorials() {
-      TutorialDataService.deleteAll()
+    deleteTutorial() {
+      TutorialDataService.delete(this.currentTutorial.id)
         .then(response => {
           console.log(response.data);
-          this.refreshList();
+          this.$router.push({ name: "tutorials" });
+          this.retrieveTutorials();
+          this.currentTutorial = null;
+          this.currentIndex = -1;
+          this.isProductDeleted = 1;
         })
         .catch(e => {
           console.log(e);
@@ -103,7 +126,7 @@ export default {
     searchTitle() {
       TutorialDataService.findByTitle(this.title)
         .then(response => {
-          this.tutorials = response.data;
+          this.tutorials = response.data.results;
           console.log(response.data);
         })
         .catch(e => {

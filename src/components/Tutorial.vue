@@ -1,55 +1,46 @@
 <template>
   <div v-if="currentTutorial" class="edit-form">
-    <h4>Tutorial</h4>
+    <h4> -: Edit Product Details :- </h4>
+    <br>
     <form>
-      <div class="form-group">
-        <label for="title">Title</label>
-        <input type="text" class="form-control" id="title"
-          v-model="currentTutorial.title"
-        />
-      </div>
-      <div class="form-group">
-        <label for="description">Description</label>
-        <input type="text" class="form-control" id="description"
-          v-model="currentTutorial.description"
-        />
-      </div>
 
       <div class="form-group">
-        <label><strong>Status:</strong></label>
-        {{ currentTutorial.published ? "Published" : "Pending" }}
-      </div>
+        <label for="title">Name:</label>
+        <input type="text" class="form-control" id="title"
+          v-model="currentTutorial.name"
+        />
+      </div><br>
+
+      <div class="form-group">
+        <label for="price">Price:</label>
+        <input type="text" class="form-control" id="price"
+          v-model="currentTutorial.price"
+        />
+      </div><br>
+
+      <div class="form-group">
+        <label for="description">Quantity:</label>
+        <input type="text" class="form-control" id="quantity"
+          v-model="currentTutorial.quantity"
+        />
+      </div><br><br>
     </form>
 
-    <button class="badge badge-primary mr-2"
-      v-if="currentTutorial.published"
-      @click="updatePublished(false)"
-    >
-      UnPublish
-    </button>
-    <button v-else class="badge badge-primary mr-2"
-      @click="updatePublished(true)"
-    >
-      Publish
-    </button>
-
-    <button class="badge badge-danger mr-2"
-      @click="deleteTutorial"
-    >
-      Delete
-    </button>
-
-    <button type="submit" class="badge badge-success"
+    <button type="submit" class="btn btn-warning" style="margin: 10px;"
       @click="updateTutorial"
     >
       Update
     </button>
+
+
+
+
     <p>{{ message }}</p>
   </div>
 
   <div v-else>
     <br />
-    <p>Please click on a Tutorial...</p>
+    <p>Click on product's to view details..</p>
   </div>
 </template>
 
@@ -68,7 +59,7 @@ export default {
     getTutorial(id) {
       TutorialDataService.get(id)
         .then(response => {
-          this.currentTutorial = response.data;
+          this.currentTutorial = response.data.results[0];
           console.log(response.data);
         })
         .catch(e => {
@@ -79,8 +70,9 @@ export default {
     updatePublished(status) {
       var data = {
         id: this.currentTutorial.id,
-        title: this.currentTutorial.title,
-        description: this.currentTutorial.description,
+        name: this.currentTutorial.name,
+        price: this.currentTutorial.price,
+        quantity: this.currentTutorial.quantity,
         published: status
       };
 
@@ -98,23 +90,13 @@ export default {
       TutorialDataService.update(this.currentTutorial.id, this.currentTutorial)
         .then(response => {
           console.log(response.data);
-          this.message = 'The tutorial was updated successfully!';
+          this.message = 'The product was updated successfully.';
         })
         .catch(e => {
           console.log(e);
         });
     },
 
-    deleteTutorial() {
-      TutorialDataService.delete(this.currentTutorial.id)
-        .then(response => {
-          console.log(response.data);
-          this.$router.push({ name: "tutorials" });
-        })
-        .catch(e => {
-          console.log(e);
-        });
-    }
   },
   mounted() {
     this.message = '';
