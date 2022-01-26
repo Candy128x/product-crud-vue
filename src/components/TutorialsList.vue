@@ -106,6 +106,7 @@ export default {
     setActiveTutorial(tutorial, index) {
       this.currentTutorial = tutorial;
       this.currentIndex = index;
+      this.isProductDeleted = null;
     },
 
     deleteTutorial() {
@@ -128,6 +129,9 @@ export default {
         .then(response => {
           this.tutorials = response.data.results;
           console.log(response.data);
+          this.currentTutorial = null;
+          this.currentIndex = -1;
+          this.isProductDeleted = null;
         })
         .catch(e => {
           console.log(e);
