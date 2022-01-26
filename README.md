@@ -17,7 +17,7 @@ Descriptions:
 
 ---
 ## Demo
-<kbd><img src="/readme_docs/imgs/products-demo.gif"></img></kbd>
-- Video [link](/readme_docs/vids/products_demo_rec.mp4)
-
+<!-- <kbd><img src="/readme_docs/imgs/products-demo.gif"></img></kbd> -->
+<!-- - Video [link](/readme_docs/vids/products_demo_rec.mp4) -->
+- [![YT-Video](/readme_docs/imgs/screenshot_from_2022-01-23_00-17-34.png)](https://youtu.be/r2KyNJzA_GA)
 
