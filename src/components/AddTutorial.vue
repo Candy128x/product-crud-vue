@@ -21,7 +21,7 @@
       <div class="form-group">
         <label for="price">Price:</label>
         <input
-          type="number"
+          type="text"
           class="form-control"
           id="price"
           required
@@ -45,12 +45,20 @@
 
     <br>
       <button @click="saveTutorial" class="btn btn-primary">Submit</button>
+
+    <div v-if="message">
+        {{this.message}}
+      </div>
+
     </div>
 
     <div v-else>
       <br><br><br>
       <h5>Product added successfully :)</h5>
     </div>
+
+
+
   </div>
 </template>
 
@@ -67,6 +75,7 @@ export default {
         price: "",
         quantity: ""
       },
+      message: null,
       submitted: false
     };
   },
@@ -75,10 +84,18 @@ export default {
       var data = {
         name: this.tutorial.name,
         price: this.tutorial.price,
-        quantity: this.tutorial.quantity
+        quantity: this.tutorial.quantity,
+        message: null
       };
 
-      TutorialDataService.create(data)
+
+
+      if (data.price >= 10000) {
+        this.message = 'price not be graterthan 10000!';
+        console.log('---inside---if-condition---');
+      }
+      else {
+        TutorialDataService.create(data)
         .then(response => {
           this.tutorial.id = response.data.id;
           console.log(response.data);
@@ -87,6 +104,9 @@ export default {
         .catch(e => {
           console.log(e);
         });
+      }
+
+
     },
     
     newTutorial() {
